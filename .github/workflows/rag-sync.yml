@@ -1,0 +1,17 @@
+name: RAG hello
+
+on:
+  workflow_dispatch:
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check WordPress status
+        run: |
+          curl -sS --fail -u "${WP_USER}:${WP_APP_PASSWORD}" \
+            "${WP_BASE_URL}/wp-json/rag/v1/status" | jq .
+        env:
+          WP_BASE_URL: ${{ secrets.WP_BASE_URL }}
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
