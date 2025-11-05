@@ -45,3 +45,11 @@ jobs:
           UPDATE_IDS: ${{ github.event.inputs.update_ids }}
         run: |
           python scripts/rag_sync_to_vector_store.py
+
+      - name: Upload generated text files (debug)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rag-txt-files
+          path: /tmp/rag_pages
+
