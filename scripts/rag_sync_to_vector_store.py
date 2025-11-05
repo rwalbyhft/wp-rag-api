@@ -10,7 +10,7 @@ WP_BASE_URL = os.environ["WP_BASE_URL"].rstrip("/")
 WP_USER = os.environ["WP_USER"]
 WP_APP_PASSWORD = os.environ["WP_APP_PASSWORD"]
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
-VECTOR_STORE_NAME = os.environ.get("VECTOR_STORE_NAME", "vbl-staging")
+VECTOR_STORE_NAME = os.environ.get("VECTOR_STORE_NAME", "vbl-rag-test")
 
 INPUT_SINCE = os.environ.get("INPUT_SINCE") or ""
 STORED_CURSOR = os.environ.get("STORED_CURSOR") or ""
