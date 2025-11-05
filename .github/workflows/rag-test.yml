@@ -1,4 +1,4 @@
-name: RAG hello
+name: RAG Test
 
 on:
   workflow_dispatch:
