@@ -1,0 +1,47 @@
+name: RAG → OpenAI Vector Store
+
+on:
+  schedule:
+    - cron: '23 7 * * 1'      # Mondays 07:23 UTC
+  workflow_dispatch:
+    inputs:
+      since:
+        description: "ISO8601 'modified_after' (optional)"
+        required: false
+      update_ids:
+        description: "Comma-separated WP post IDs to reindex now (optional)"
+        required: false
+
+concurrency:
+  group: rag-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install openai==1.* requests==2.* tenacity==8.*
+
+      - name: Run RAG sync → Vector Store
+        env:
+          WP_BASE_URL: ${{ secrets.WP_BASE_URL }}
+          WP_USER: ${{ secrets.WP_USER }}
+          WP_APP_PASSWORD: ${{ secrets.WP_APP_PASSWORD }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          VECTOR_STORE_NAME: vbl-staging
+          STORED_CURSOR: ${{ vars.RAG_MODIFIED_AFTER }}
+          INPUT_SINCE: ${{ github.event.inputs.since }}
+          UPDATE_IDS: ${{ github.event.inputs.update_ids }}
+        run: |
+          python scripts/rag_sync_to_vector_store.py
