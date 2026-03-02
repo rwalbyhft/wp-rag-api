@@ -33,7 +33,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install "openai>=1.48,<2" requests==2.* tenacity==8.*
 
-      - name: Run RAG sync → Vector Store
+      - name: Run RAG Sync → Vector Store
         env:
           WP_BASE_URL: ${{ secrets.WP_BASE_URL }}
           WP_USER: ${{ secrets.WP_USER }}
