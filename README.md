@@ -1,4 +1,4 @@
-# RAG API Access (Rebuilt) — v4.2
+# RAG API Access (Rebuilt) — v4.3
 
 Expose Bricks-rendered WordPress pages via secure REST endpoints designed for Retrieval-Augmented Generation (RAG): pagination, incremental sync, and brand/pillar/section metadata derived from ACF breadcrumbs (with URL fallback).
 
