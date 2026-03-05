@@ -3,7 +3,7 @@
 Plugin Name: RAG Content API Endpoint
 Plugin URI:  https://vbl.harborfreight.com
 Description: REST API endpoints for RAG pipelines with live Bricks <main> extraction, lazy-load resolution, structural plaintext, chunking, incremental sync. Optimized for OpenAI Vector Store ingestion.
-Version: 2.5.0
+Version: 2.6.0
 Author: Ross Walby
 */
 
@@ -12,7 +12,10 @@ if (!defined('ABSPATH')) { exit; }
 class RAG_Content_API {
     const API_NS           = 'rag/v1';
     const CAPABILITY       = 'read';
-    const RAG_USER         = 'rag-system';
+    const RAG_USERS = array(
+        'rag-system',
+        'MLOpsrunner'
+    );
     const MAX_PER_PAGE     = 100;
     const DEFAULT_PER_PAGE = 50;
 
@@ -135,10 +138,19 @@ class RAG_Content_API {
         if (!is_user_logged_in()) {
             return new WP_Error('rag_auth', 'Authentication required.', array('status' => 401));
         }
+        
         $user = wp_get_current_user();
-        if (($user->user_login === self::RAG_USER && current_user_can(self::CAPABILITY)) || current_user_can('manage_options')) {
+        
+        if (
+            (
+                in_array($user->user_login, self::RAG_USERS, true)
+                && current_user_can(self::CAPABILITY)
+            )
+            || current_user_can('manage_options')
+        ) {
             return true;
         }
+        
         return new WP_Error('rag_forbidden', 'Forbidden.', array('status' => 403));
     }
 
@@ -647,3 +659,4 @@ class RAG_Content_API {
 
 // Initialize
 add_action('plugins_loaded', function(){ new RAG_Content_API(); });
+
